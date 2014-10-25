@@ -5,10 +5,6 @@ package Controllers;
  */
 public class PolicyController {
 
-    public PolicyController(){
-
-    }
-
     public void ParsePolicy(String policy){
 
     }

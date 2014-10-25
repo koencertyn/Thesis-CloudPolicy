@@ -1,23 +1,30 @@
 package Policies;
 
-import Policies.Actions.Action;
-
 /**
  * Created by koencertyn on 20/10/14.
  */
-public class DataPolicy extends Policy{
+public class DataPolicy extends Policy {
 
-    public DataPolicy(){
-
+    public DataPolicy(Value value){
+        setValue(value);
     }
 
     @Override
-    public Action getActions() {
-        return new Action() {
-            @Override
-            public String getCommand() {
-                return "test";
-            }
-        };
+    public CloudPolicyType getPolicyType() {
+        return CloudPolicyType.DATAMODEL;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
+
+    private DataPolicy.Value value;
+
+    public enum Value{
+        SMALL, MEDIUM, LARGE
     }
 }
