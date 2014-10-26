@@ -14,6 +14,7 @@ public class RequestInterpreter {
         for(String attribute : this.attributes){
             attributes.put(attribute,getAttribute(attribute,requestType));
         }
+
         return attributes;
     }
 
