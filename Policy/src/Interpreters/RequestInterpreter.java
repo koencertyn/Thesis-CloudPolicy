@@ -18,7 +18,7 @@ public class RequestInterpreter {
         return attributes;
     }
 
-    public String getAttribute(String attribute, String request){
+    private String getAttribute(String attribute, String request){
         int lowerIndex = request.indexOf( "<"+attribute+">" ) + ("<"+attribute+">").length();
         int higherIndex = request.indexOf( "</"+attribute+">" );
         return request.substring(lowerIndex,higherIndex).replaceAll("\\s+", "");

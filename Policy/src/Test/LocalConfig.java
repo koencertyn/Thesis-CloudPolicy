@@ -10,8 +10,8 @@ import java.util.Random;
  */
 public class LocalConfig {
 
-    public int load;
-    public ArrayList<Request> jobList;
+    private static int load;
+    private ArrayList<Request> jobList;
 
     public LocalConfig(int iniLoad){
         this.load = iniLoad;
@@ -20,21 +20,31 @@ public class LocalConfig {
 
     public void addJob(Request request){
         jobList.add(request);
+        setLoad(true);
     }
 
-    public void removeJob(){
-        jobList.remove(0);
+    public void removeJob(Request request){
+        jobList.remove(request);
+        setLoad(false);
     }
 
-    public int getLoad(){
-        return this.load;
+    public void recalculateJobs(){
+        for(Request request : jobList){
+            if(request.getEstimatedCalculationTime() < 1)
+                removeJob(request);
+            else
+                request.setEstimatedDuration(request.getEstimatedCalculationTime() - 5);
+        }
     }
 
-    private void setLoad{
+    public static int getLoad(){
+        return load;
+    }
+
+    private void setLoad(boolean add){
         Random rand = new Random();
-        int value = rand.nextInt(50);
-        int min = rand.nextInt(1);
-        if(min == 1){
+        int value = rand.nextInt(20);
+        if(add){
             load = load + value;
             if(load > 100)
                 load = 100;
