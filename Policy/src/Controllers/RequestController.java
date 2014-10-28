@@ -1,5 +1,6 @@
 package Controllers;
 
+import Handlers.CloudHandler;
 import Handlers.RequestHandler;
 import Interpreters.LocalConditionInterpreter;
 import Interpreters.RequestInterpreter;
@@ -14,14 +15,20 @@ public class RequestController {
     private LocalConditionInterpreter localConditions;
     private RequestInterpreter requestInterpreter;
 
-    public RequestController(LocalConditionInterpreter localConditions, RequestInterpreter requestInterpreter){
+    private CloudHandler cloudHandler;
+
+    public RequestController(LocalConditionInterpreter localConditions, RequestInterpreter requestInterpreter,
+                             CloudHandler cloudHandler){
+        setCloudHandler(cloudHandler);
         setLocalConditions(localConditions);
         setRequestInterpreter(requestInterpreter);
     }
 
     private LocalConfig local;
 
-    public RequestController(LocalConditionInterpreter localConditions, RequestInterpreter requestInterpreter, LocalConfig local){
+    public RequestController(LocalConditionInterpreter localConditions, RequestInterpreter requestInterpreter,
+                             CloudHandler cloudHandler, LocalConfig local){
+        setCloudHandler(cloudHandler);
         setLocalConditions(localConditions);
         setRequestInterpreter(requestInterpreter);
         this.local = local;
@@ -38,13 +45,22 @@ public class RequestController {
     }
 
     public void addCloudJob(Request request) {
-        System.out.println("adding cloudjob");
+        getCloudHandler().handle(request);
     }
 
     public void bootCloud() {
         System.out.println("booting cloud");
 
     }
+
+    public CloudHandler getCloudHandler() {
+        return cloudHandler;
+    }
+
+    public void setCloudHandler(CloudHandler cloudHandler) {
+        this.cloudHandler = cloudHandler;
+    }
+
 
     private LocalConditionInterpreter getLocalConditions() {
         return localConditions;

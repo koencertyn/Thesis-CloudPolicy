@@ -17,24 +17,23 @@ import java.util.Map;
  */
 public class CloudHandler {
 
-    private Request request;
-
     private CloudPolicyInterpreter cloudInterpreter;
     private RequestInterpreter requestInterpreter;
     private RequestController requestController;
 
-    public CloudHandler(Request request, RequestController requestController,
+    public CloudHandler(RequestController requestController,
                           RequestInterpreter requestInterpreter, CloudPolicyInterpreter cloudInterpreter){
-        setRequest(request);
         setCloudInterpreter(cloudInterpreter);
         setRequestController(requestController);
         setRequestInterpreter(requestInterpreter);
     }
 
-    public void handle(){
+    public void handle(Request request){
         ArrayList<Hashtable<String,String>> cloudSelection = cloudInterpreter.getAttributes();
-        Hashtable<String,String> requestInfo = requestInterpreter.getAttributes(getRequest().getValue());
+        Hashtable<String,String> requestInfo = requestInterpreter.getAttributes(request.getValue());
         handlePriority(cloudSelection,requestInfo.get("priority"));
+        handleEncryption(cloudSelection,requestInfo.get("encryption"));
+        handleData(cloudSelection, requestInfo.get("data")); 
     }
 
     public ArrayList<Hashtable<String,String>> handlePriority(ArrayList<Hashtable<String,String>> cloudSelection,
@@ -44,7 +43,26 @@ public class CloudHandler {
                 cloudSelection.remove(entry);
             }
         }
+        return cloudSelection;
+    }
 
+    public ArrayList<Hashtable<String,String>> handleEncryption(ArrayList<Hashtable<String,String>> cloudSelection,
+                                                              String encryption){
+        for(Hashtable<String,String> entry : cloudSelection){
+            if(! hasEncryption(encryption, entry)){
+                cloudSelection.remove(entry);
+            }
+        }
+        return cloudSelection;
+    }
+
+    public ArrayList<Hashtable<String,String>> handleData(ArrayList<Hashtable<String,String>> cloudSelection,
+                                                                String data){
+        for(Hashtable<String,String> entry : cloudSelection){
+            if(! hasData(data, entry)){
+                cloudSelection.remove(entry);
+            }
+        }
         return cloudSelection;
     }
 
@@ -69,21 +87,31 @@ public class CloudHandler {
 
     public boolean hasEncryption(String encryption, Hashtable<String, String> entry){
         if (encryption.equals("yes")){
-            if( ! entry.equals("yes"))
+            if( entry.equals("yes"))
+                return true;
+            else if( entry.equals("no"))
                 return false;
-            return true;
+            else
+                throw new IllegalArgumentException("Unexpected priority parameter given.");
         }
         return true;
     }
 
-
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public void setRequest(Request request) {
-        this.request = request;
+    public boolean hasData(String data, Hashtable<String, String> entry){
+        /*
+            Currently java 1.6 does not support switch case with strings.  1.7 does.
+         */
+        if (data.equals("basic")) {
+            return true;
+        } else if (data.equals("average")) {
+            if(entry.equals("basic"))
+                return false;
+            return true;
+        } else if (data.equals("extended")) {
+            return entry.equals("extended");
+        } else {
+            throw new IllegalArgumentException("Unexpected priority parameter given.");
+        }
     }
 
     public CloudPolicyInterpreter getCloudInterpreter() {
