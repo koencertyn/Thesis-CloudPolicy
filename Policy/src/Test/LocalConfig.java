@@ -1,5 +1,6 @@
 package Test;
 
+import Logger.LocalRequestLogger;
 import Requests.Request;
 
 import java.util.ArrayList;
@@ -12,13 +13,16 @@ public class LocalConfig {
 
     private static int load;
     private ArrayList<Request> jobList;
+    private LocalRequestLogger logger;
 
     public LocalConfig(int iniLoad){
+        this.logger = new LocalRequestLogger();
         this.load = iniLoad;
         jobList = new ArrayList<Request>();
     }
 
     public void addJob(Request request){
+        logger.log(request);
         jobList.add(request);
         setLoad(true);
     }

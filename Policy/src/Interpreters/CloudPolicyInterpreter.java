@@ -17,13 +17,13 @@ public class CloudPolicyInterpreter {
     public ArrayList<Hashtable<String,String>> getAttributes(){
 
         ArrayList<Hashtable<String,String>> result = new ArrayList<Hashtable<String, String>>();
-        Hashtable<String,String> attributes = new Hashtable<String,String>();
 
         String cloudConfig = readFile("/Users/koencertyn/thesis/Thesis-CloudPolicy/Policy/cloudConfig.conf").toLowerCase();
         int lowerCloud = 0;
         int higherCloud = cloudConfig.length();
 
         while(lowerCloud < higherCloud){
+            Hashtable<String,String> attributes = new Hashtable<String,String>();
             String selectConfig = cloudConfig.substring(lowerCloud,higherCloud);
 
             int lowerIndex = selectConfig.indexOf( "<cloud>" ) + ("<cloud>").length();
@@ -32,13 +32,11 @@ public class CloudPolicyInterpreter {
             lowerCloud = lowerCloud + higherIndex + ("</cloud>").length();
 
             String cloudInformation = selectConfig.substring(lowerIndex,higherIndex);
-            System.out.println(cloudInformation);
             for(String attribute : this.attributes){
                 attributes.put(attribute,getAttribute(attribute,cloudInformation));
-                result.add(attributes);
             }
+            result.add(attributes);
         }
-
         return result;
     }
 
