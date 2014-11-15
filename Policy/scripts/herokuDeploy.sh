@@ -1,0 +1,5 @@
+#!/bin/sh
+cd ~/heroku/
+heroku create
+git push heroku master
+heroku open

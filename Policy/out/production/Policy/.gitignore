@@ -1,7 +1,4 @@
 /Controllers
-/Main
-/Policies
 /Handlers
-/Interpreters
-/Requests
+/Logger
 /Test
