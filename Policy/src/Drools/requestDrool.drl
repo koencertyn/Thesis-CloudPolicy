@@ -1,0 +1,30 @@
+package Drools
+
+import com.sample.Local;
+
+rule "If the local server is not busy, every request should be done locally."
+
+    when
+        local : Local( local.getLoad() < 40 )
+    then
+       	System.out.println("Other processes (with low priority) can be started.");
+
+end
+
+rule "If the local server is balanced, no free processes can be started."
+
+    when
+        local : Local( local.getLoad() > 40 && local.getLoad() < 80 )
+    then
+       	System.out.println("Other processes (with low priority) can be started.");
+
+end
+
+rule "If the local server is to busy, everything has to be forwarded to the cloud."
+
+    when
+        local : Local( local.getLoad() > 80 )
+    then
+       	System.out.println("send to cloud Drool");
+
+end
