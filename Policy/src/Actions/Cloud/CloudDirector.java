@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 /**
  * Created by koencertyn on 15/11/14.
  */
-public class CloudDirector {
+public class  CloudDirector {
 
     public void executeAction(String cloud){
         invokeMethod(cloud,"executeAction");

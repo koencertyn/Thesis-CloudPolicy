@@ -9,6 +9,8 @@ public class Request {
 
     private String value;
 
+    public static boolean handled = false;
+
     private int estimatedDuration;
 
     public Request(String value){
@@ -16,6 +18,10 @@ public class Request {
         Random rand = new Random();
         int nb = rand.nextInt(100);
         setEstimatedDuration(nb);
+    }
+
+    public static void setHandled(){
+        handled = true;
     }
 
     public String getValue() {
